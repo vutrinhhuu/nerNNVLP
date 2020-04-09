@@ -17,6 +17,9 @@ embedd_dim = np.shape(embedding_vectors)[1]
 unknown_embedd = np.load('embedding/unknown.npy')
 word_end = "##WE##"
 
+batch_size = 10
+output_dir = 'output/ner'
+
 def load_conll_data(path):
     word_sentences = []
     pos_sentences = []
@@ -186,5 +189,10 @@ if __name__ == '__main__':
     prediction = utils.crf_prediction(energies)
     prediction_fn = theano.function([input_var, mask_var, char_input_var], [prediction])
     
-    predictions = prediction_fn(word_test, mask_test, char_test)
-    print(predictions)
+    for batch in utils.iterate_minibatches(word_test, label_test, masks=mask_test, char_inputs=char_test,
+                                                   batch_size=batch_size):
+        inputs, targets, masks, char_inputs = batch
+        predictions = prediction_fn(inputs, masks, char_inputs)
+        print(predictions)
+        utils.output_predictions(predictions[0], targets, masks, output_dir + '/test_ner', alphabet_label,
+                                         is_flattened=False)
