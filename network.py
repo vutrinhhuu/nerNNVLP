@@ -126,10 +126,10 @@ def build_model(embedd_dim, max_sent_length, max_char_length, char_alphabet_size
         concat = lasagne.layers.DropoutLayer(concat, p=0.5)
     # the shape of Bi-LSTM output (concat) is (batch_size, input_length, 2 * num_hidden_units)
     model = CRFLayer(concat, num_labels, mask_input=layer_mask)
-    energies = lasagne.layers.get_output(model, deterministic=True)
-    prediction = utils.crf_prediction(energies)
-    prediction_fn = theano.function([input_var, mask_var, char_input_var], [prediction])
-    return model, input_var, target_var, mask_var, char_input_var, prediction_fn
+    # energies = lasagne.layers.get_output(model, deterministic=True)
+    # prediction = utils.crf_prediction(energies)
+    # prediction_fn = theano.function([input_var, mask_var, char_input_var], [prediction])
+    return model, input_var, target_var, mask_var, char_input_var
 
 
 def train_model(num_data, batch_size, learning_rate, patience, decay_rate, X_train, Y_train, mask_train, C_train, X_dev,

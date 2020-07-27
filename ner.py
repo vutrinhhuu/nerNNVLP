@@ -180,7 +180,7 @@ if __name__ == '__main__':
                            alphabet_chunk, alphabet_label, alphabet_char)
 
     print('Building model...')
-    ner_model, input_var, target_var, mask_var, char_input_var, prediction_fn = \
+    ner_model, input_var, target_var, mask_var, char_input_var = \
         network.build_model(embedd_dim_concat, max_sent_length, max_char_length, alphabet_char.size(), char_embedd_dim,
                             num_labels, dropout, num_filters, num_units, grad_clipping, peepholes, char_embedd_table)
 
